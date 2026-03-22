@@ -18,15 +18,21 @@ export function Login({ onLogin, students }: LoginProps) {
     setError('');
 
     if (role === 'admin') {
+      // Mật khẩu mới của thầy Tuấn
       if (password === 'Dactuanvinhloc1602@') {
-        onLogin({ role: 'admin' });
+        onLogin({ 
+          role: 'admin' 
+        });
       } else {
-        setError('Mật khẩu không đúng. (Mật khẩu mặc định: admin)');
+        setError('Mật khẩu giáo viên không chính xác.');
       }
     } else {
       const student = students.find(s => s.phone === phone);
       if (student) {
-        onLogin({ role: 'student', studentId: student.id });
+        onLogin({ 
+          role: 'student', 
+          studentId: student.id 
+        });
       } else {
         setError('Không tìm thấy học sinh với số điện thoại này.');
       }
@@ -51,7 +57,8 @@ export function Login({ onLogin, students }: LoginProps) {
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-slate-200">
           <div className="flex justify-center space-x-4 mb-8">
             <button
-              onClick={() => { setRole('student'); setError(''); }}
+              type="button"
+              onClick={() => { setRole('student'); setError(''); setPassword(''); }}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 role === 'student'
                   ? 'bg-indigo-100 text-indigo-700'
@@ -61,7 +68,8 @@ export function Login({ onLogin, students }: LoginProps) {
               Học sinh
             </button>
             <button
-              onClick={() => { setRole('admin'); setError(''); }}
+              type="button"
+              onClick={() => { setRole('admin'); setError(''); setPhone(''); }}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 role === 'admin'
                   ? 'bg-indigo-100 text-indigo-700'
@@ -76,7 +84,7 @@ export function Login({ onLogin, students }: LoginProps) {
             {role === 'admin' ? (
               <div>
                 <label className="block text-sm font-medium text-slate-700">
-                  Mật khẩu
+                  Mật khẩu Giáo viên
                 </label>
                 <div className="mt-1 relative rounded-md shadow-sm">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -88,7 +96,7 @@ export function Login({ onLogin, students }: LoginProps) {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-slate-300 rounded-md p-2 border outline-none"
-                    placeholder="Nhập mật khẩu (admin)"
+                    placeholder="Nhập mật khẩu bảo mật"
                   />
                 </div>
               </div>
@@ -107,7 +115,7 @@ export function Login({ onLogin, students }: LoginProps) {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-slate-300 rounded-md p-2 border outline-none"
-                    placeholder="Nhập số điện thoại"
+                    placeholder="Nhập số điện thoại đã đăng ký"
                   />
                 </div>
               </div>
@@ -124,7 +132,7 @@ export function Login({ onLogin, students }: LoginProps) {
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
-                Đăng nhập
+                Đăng nhập hệ thống
               </button>
             </div>
           </form>
