@@ -40,6 +40,18 @@ export const initialNotifications: AppNotification[] = [
 export const initialSettings: AppSettings = {
   facebookGroupUrl: 'https://www.facebook.com/groups/mathmaster'
 };
+export const initialSettings: AppSettings = {
+  facebookGroupUrl: 'https://www.facebook.com/groups/mathmaster'
+};
+export const initialSettings: AppSettings = {
+  facebookGroupUrl: 'https://www.facebook.com/groups/mathmaster'
+};
 
 export const initialSubmissions: ExerciseSubmission[] = [];
 
+// Thêm đoạn này vào để định nghĩa tài khoản Giáo viên
+export const initialAdmin = {
+  username: 'admin',      // Tên đăng nhập
+  password: 'Dactuanvinhloc1602@',        // Mật khẩu (thầy có thể đổi tùy ý)
+  name: 'Thầy Đắc Tuấn'        // Tên hiển thị
+};
