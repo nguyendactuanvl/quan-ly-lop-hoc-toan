@@ -38,13 +38,13 @@ export const initialNotifications: AppNotification[] = [
 ];
 
 export const initialSettings: AppSettings = {
-  facebookGroupUrl: 'https://www.facebook.com/groups/mathmaster'
+  facebookGroupUrl1: 'https://www.facebook.com/groups/mathmaster1'
 };
 export const initialSettings: AppSettings = {
-  facebookGroupUrl: 'https://www.facebook.com/groups/mathmaster'
+  facebookGroupUrl2: 'https://www.facebook.com/groups/mathmaster2'
 };
 export const initialSettings: AppSettings = {
-  facebookGroupUrl: 'https://www.facebook.com/groups/mathmaster'
+  facebookGroupUrl3: 'https://www.facebook.com/groups/mathmaster3'
 };
 
 export const initialSubmissions: ExerciseSubmission[] = [];
