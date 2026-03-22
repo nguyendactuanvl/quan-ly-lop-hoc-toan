@@ -1,3 +1,5 @@
+import { supabase } from './lib/supabase';
+import { useEffect } from 'react';
 import React, { useState } from 'react';
 import { Sidebar, TabType } from './components/Sidebar';
 import { Dashboard } from './components/Dashboard';
@@ -16,6 +18,14 @@ import { initialStudents, initialSchedule, initialExercises, initialRegistration
 import { Student, AttendanceRecord, TuitionRecord, ScheduleItem, Exercise, Registration, ClassInfo, AppNotification, AppSettings, ExerciseSubmission, User } from './types';
 
 export default function App() {
+  useEffect(() => {
+  const loadData = async () => {
+    // Lấy danh sách học sinh từ Supabase
+    const { data } = await supabase.from('students').select('*');
+    if (data) setStudents(data);
+  };
+  loadData();
+}, []);
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
   const [currentUser, setCurrentUser] = useLocalStorage<User | null>('math_current_user', null);
 
