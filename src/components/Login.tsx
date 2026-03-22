@@ -18,7 +18,7 @@ export function Login({ onLogin, students }: LoginProps) {
     setError('');
 
     if (role === 'admin') {
-      if (password === 'admin') {
+      if (password === 'Dactuanvinhloc1602@') {
         onLogin({ role: 'admin' });
       } else {
         setError('Mật khẩu không đúng. (Mật khẩu mặc định: admin)');
