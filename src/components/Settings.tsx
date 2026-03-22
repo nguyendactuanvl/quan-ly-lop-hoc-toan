@@ -30,7 +30,7 @@ export function Settings({ settings, setSettings }: SettingsProps) {
         
         <form onSubmit={handleSave} className="p-6 space-y-6">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center">
+            <label className="text-sm font-medium text-slate-700 mb-2 flex items-center">
               <Facebook size={18} className="mr-2 text-blue-600" />
               Link nhóm Facebook (Dành cho học sinh)
             </label>
@@ -52,7 +52,7 @@ export function Settings({ settings, setSettings }: SettingsProps) {
                 Đã lưu cài đặt thành công!
               </span>
             ) : (
-              <span></span>
+              <span />
             )}
             <button 
               type="submit"
