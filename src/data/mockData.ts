@@ -38,15 +38,8 @@ export const initialNotifications: AppNotification[] = [
 ];
 
 export const initialSettings: AppSettings = {
-  facebookGroupUrl1: 'https://www.facebook.com/groups/mathmaster1'
+  facebookGroupUrl: 'https://www.facebook.com/groups/mathmaster'
 };
-export const initialSettings: AppSettings = {
-  facebookGroupUrl2: 'https://www.facebook.com/groups/mathmaster2'
-};
-export const initialSettings: AppSettings = {
-  facebookGroupUrl3: 'https://www.facebook.com/groups/mathmaster3'
-};
-
 export const initialSubmissions: ExerciseSubmission[] = [];
 
 // Thêm đoạn này vào để định nghĩa tài khoản Giáo viên
