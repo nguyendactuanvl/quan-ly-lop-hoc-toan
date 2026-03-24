@@ -14,22 +14,16 @@ import { Notifications } from './components/Notifications';
 import { Settings } from './components/Settings';
 import { Login } from './components/Login';
 import { useLocalStorage } from './hooks/useLocalStorage';
-import { initialStudents, initialSchedule, initialExercises, initialRegistrations, initialClasses, initialNotifications, initialSettings, initialSubmissions } from './data/mockData';
+import { initialSchedule, initialExercises, initialRegistrations, initialClasses, initialNotifications, initialSettings, initialSubmissions } from './data/mockData';
 import { Student, AttendanceRecord, TuitionRecord, ScheduleItem, Exercise, Registration, ClassInfo, AppNotification, AppSettings, ExerciseSubmission, User } from './types';
 
 export default function App() {
-  useEffect(() => {
-  const loadData = async () => {
-    // Lấy danh sách học sinh từ Supabase
-    const { data } = await supabase.from('students').select('*');
-    if (data) setStudents(data);
-  };
-  loadData();
-}, []);
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
   const [currentUser, setCurrentUser] = useLocalStorage<User | null>('math_current_user', null);
 
-  const [students, setStudents] = useLocalStorage<Student[]>('math_students', initialStudents);
+  // Quan trọng: Dùng useState để chứa dữ liệu từ Supabase thay vì LocalStorage cũ
+  const [students, setStudents] = useState<Student[]>([]);
+  
   const [classes, setClasses] = useLocalStorage<ClassInfo[]>('math_classes', initialClasses);
   const [attendance, setAttendance] = useLocalStorage<AttendanceRecord[]>('math_attendance', []);
   const [tuition, setTuition] = useLocalStorage<TuitionRecord[]>('math_tuition', []);
@@ -40,8 +34,40 @@ export default function App() {
   const [notifications, setNotifications] = useLocalStorage<AppNotification[]>('math_notifications', initialNotifications);
   const [settings, setSettings] = useLocalStorage<AppSettings>('math_settings', initialSettings);
 
+  // 1. Tự động tải danh sách học sinh từ Supabase mỗi khi mở App
+  useEffect(() => {
+    const loadData = async () => {
+      const { data, error } = await supabase
+        .from('students')
+        .select('*');
+
+      if (error) {
+        console.error('Lỗi tải học sinh từ Supabase:', error.message);
+      } else if (data) {
+        // Ánh xạ (Map) dữ liệu từ Supabase (class_id) sang kiểu dữ liệu của App (classId)
+        const formattedData: Student[] = data.map(item => ({
+          id: item.id.toString(),
+          name: item.name,
+          phone: item.phone,
+          classId: item.class_id || '',
+          parentPhone: item.parent_phone || '',
+          joinDate: item.created_at
+        }));
+        setStudents(formattedData);
+        console.log("Đã tải danh sách học sinh mới nhất từ Supabase");
+      }
+    };
+    loadData();
+  }, []);
+
+  // 2. Hàm đăng nhập
+  const handleLoginAction = (user: User) => {
+    setCurrentUser(user);
+  };
+
+  // 3. Nếu chưa đăng nhập, hiện màn hình Login với danh sách students mới nhất
   if (!currentUser) {
-    return <Login onLogin={setCurrentUser} students={students} />;
+    return <Login onLogin={handleLoginAction} students={students} />;
   }
 
   const renderContent = () => {
@@ -65,7 +91,7 @@ export default function App() {
       case 'notifications':
         return <Notifications notifications={notifications} setNotifications={setNotifications} currentUser={currentUser} />;
       case 'settings':
-        return currentUser.role === 'admin' ? <Settings settings={settings} setSettings={setSettings} /> : null;
+        return <Settings settings={settings} setSettings={setSettings} />;
       default:
         return <Dashboard students={students} attendance={attendance} tuition={tuition} registrations={registrations} notifications={notifications} settings={settings} classes={classes} currentUser={currentUser} />;
     }
