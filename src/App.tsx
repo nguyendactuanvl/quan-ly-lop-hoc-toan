@@ -21,7 +21,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
   const [currentUser, setCurrentUser] = useLocalStorage<User | null>('math_current_user', null);
 
-  // Quan trọng: Dùng useState để chứa dữ liệu từ Supabase thay vì LocalStorage cũ
+  // Quan trọng: Dùng useState để chứa dữ liệu từ Supabase
   const [students, setStudents] = useState<Student[]>([]);
   
   const [classes, setClasses] = useLocalStorage<ClassInfo[]>('math_classes', initialClasses);
@@ -44,32 +44,25 @@ export default function App() {
       if (error) {
         console.error('Lỗi tải học sinh từ Supabase:', error.message);
       } else if (data) {
-        // Ánh xạ (Map) dữ liệu từ Supabase (class_id) sang kiểu dữ liệu của App (classId)
-        // Đã sửa lỗi: classId -> class_id và parentPhone -> parent_phone
+        // Ánh xạ (Map) dữ liệu từ Supabase sang kiểu dữ liệu của App
         const formattedData: Student[] = data.map(item => ({
           id: item.id.toString(),
-          name: item.name,
-          phone: item.phone,
-          // SỬA 2 DÒNG DƯỚI ĐÂY ĐỂ ĐỒNG BỘ VỚI DATABASE
-          classId: item.class_id || '',      // Chuyển class_id từ DB thành classId cho App
-          parentPhone: item.parent_phone || '', // Chuyển parent_phone từ DB thành parentPhone cho App
+          name: item.name || '',
+          phone: item.phone || '',
+          // ÉP KIỂU: Lấy thẳng tên lớp từ class_id để hiển thị, không qua trung gian
+          classId: item.class_id || 'Chưa xếp lớp',
+          parentPhone: item.parent_phone || '',
           joinDate: item.created_at
         }));
         setStudents(formattedData);
-        console.log("Đã tải danh sách học sinh mới nhất từ Supabase");
+        console.log("Đã tải dữ liệu và ép kiểu tên lớp thành công");
       }
     };
     loadData();
   }, []);
 
-  // 2. Hàm đăng nhập
-  const handleLoginAction = (user: User) => {
-    setCurrentUser(user);
-  };
-
-  // 3. Nếu chưa đăng nhập, hiện màn hình Login với danh sách students mới nhất
   if (!currentUser) {
-    return <Login onLogin={handleLoginAction} students={students} />;
+    return <Login onLogin={setCurrentUser} students={students} />;
   }
 
   const renderContent = () => {
@@ -79,6 +72,7 @@ export default function App() {
       case 'classes':
         return currentUser.role === 'admin' ? <Classes classes={classes} setClasses={setClasses} /> : null;
       case 'students':
+        // Truyền thẳng danh sách students đã format vào component
         return currentUser.role === 'admin' ? <Students students={students} setStudents={setStudents} classes={classes} /> : null;
       case 'attendance':
         return <Attendance students={students} attendance={attendance} setAttendance={setAttendance} classes={classes} currentUser={currentUser} />;
