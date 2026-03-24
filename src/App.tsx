@@ -45,12 +45,14 @@ export default function App() {
         console.error('Lỗi tải học sinh từ Supabase:', error.message);
       } else if (data) {
         // Ánh xạ (Map) dữ liệu từ Supabase (class_id) sang kiểu dữ liệu của App (classId)
+        // Đã sửa lỗi: classId -> class_id và parentPhone -> parent_phone
         const formattedData: Student[] = data.map(item => ({
           id: item.id.toString(),
           name: item.name,
           phone: item.phone,
-          classId: item.class_id || '',
-          parentPhone: item.parent_phone || '',
+          // SỬA 2 DÒNG DƯỚI ĐÂY ĐỂ ĐỒNG BỘ VỚI DATABASE
+          classId: item.class_id || '',      // Chuyển class_id từ DB thành classId cho App
+          parentPhone: item.parent_phone || '', // Chuyển parent_phone từ DB thành parentPhone cho App
           joinDate: item.created_at
         }));
         setStudents(formattedData);
